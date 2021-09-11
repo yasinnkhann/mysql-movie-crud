@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import './App.css';
 
@@ -8,6 +8,8 @@ function App() {
   const [review, setReview] = useState('');
   const [movieReviewList, setMovieReviewList] = useState([]);
   const [newReview, setNewReview] = useState('');
+
+  const updateReviewRef = useRef(null);
 
   useEffect(() => {
     axios.get('http://localhost:3001/api/get')
@@ -28,14 +30,21 @@ function App() {
     document.getElementById('reviewInput').value = '';
   };
 
-   const deleteReview = (movie) => {
-    axios.delete(`http://localhost:3001/api/delete/${movie}`);
+  const deleteReview = movieName => {
+    axios.delete(`http://localhost:3001/api/delete/${movieName}`);
+
+      setMovieReviewList(movieReviewList.filter((movieReview) => {
+        return movieReview.movieName !== movieName;
+      }))
   };
 
-  const updateReview = (movie) => {
-    axios.put(`http://localhost:3001/api/update`, {movieName: movie, movieReview: newReview});
+    const updateReview = movieName => {
+    axios.put(`http://localhost:3001/api/update`, {movieName: movieName, movieReview: newReview});
 
-    setNewReview('');
+    setMovieReviewList(movieReviewList.map((filmObj) => {
+      return filmObj.movieName === movieName ? {movieName: movieName, movieReview: newReview} : filmObj;
+    }))
+    updateReviewRef.current.value = '';
   };
 
   return (
@@ -64,15 +73,22 @@ function App() {
               <h1>{val.movieName}</h1>
               <p>{val.movieReview}</p>
 
-              <button onClick={() => deleteReview(val.movieName)}>Delete</button>
+              <button
+              onClick={() => deleteReview(val.movieName)}
+              >
+                Delete
+              </button>
 
               <input 
               id="updateInput"
               type="text" 
               onChange={(e) => setNewReview(e.target.value)}
+              ref={updateReviewRef}
               />
 
-              <button onClick={() => updateReview(val.movieName)}>
+              <button 
+              onClick={() => updateReview(val.movieName)}
+              >
                 Update
               </button>
             </div>
