@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const e = require('express');
 
 const app = express();
 
@@ -22,7 +23,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.get('/api/get', (req, res) => {
     const sqlSelect = `SELECT * FROM movie_reviews;`;
     db.query(sqlSelect, (err, result) => {
-            res.send(result);
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
         });
 });
 
@@ -32,7 +37,7 @@ app.post('/api/insert', (req, res) => {
 
     const sqlInsert = `INSERT INTO movie_reviews (movieName, movieReview) VALUES (?,?);`
     db.query(sqlInsert, [movieName, movieReview], (err, result) => {
-        console.log(result);
+        res.send(result);
     });
 });
 
@@ -42,6 +47,8 @@ app.delete('/api/delete/:movieName', (req, res) => {
   db.query(sqlDelete, name, (err, result) => {
     if (err) {
         console.log(err);
+    } else {
+      res.send(result);
     }
   });
 });
@@ -54,7 +61,7 @@ app.put('/api/update', (req, res) => {
     if (err) {
         console.log(err);
     } else {
-        console.log('UPDATED: ',result);
+        res.send(result);
     }
   });
 });
