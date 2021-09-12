@@ -2,7 +2,6 @@ const express = require('express');
 const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const e = require('express');
 
 const app = express();
 
@@ -41,18 +40,6 @@ app.post('/api/insert', (req, res) => {
     });
 });
 
-app.delete('/api/delete/:movieName', (req, res) => {
-  const name = req.params.movieName;
-  const sqlDelete = `DELETE FROM movie_reviews WHERE movieName = ?;`;
-  db.query(sqlDelete, name, (err, result) => {
-    if (err) {
-        console.log(err);
-    } else {
-      res.send(result);
-    }
-  });
-});
-
 app.put('/api/update', (req, res) => {
   const name = req.body.movieName;
   const review = req.body.movieReview;
@@ -62,6 +49,18 @@ app.put('/api/update', (req, res) => {
         console.log(err);
     } else {
         res.send(result);
+    }
+  });
+});
+
+app.delete('/api/delete/:movieName', (req, res) => {
+  const name = req.params.movieName;
+  const sqlDelete = `DELETE FROM movie_reviews WHERE movieName = ?;`;
+  db.query(sqlDelete, name, (err, result) => {
+    if (err) {
+        console.log(err);
+    } else {
+      res.send(result);
     }
   });
 });

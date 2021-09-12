@@ -14,6 +14,7 @@ function App() {
   useEffect(() => {
     axios.get('http://localhost:3001/api/get')
     .then(res => {
+      console.log(res.data);
       setMovieReviewList(res.data);
     })
     .catch(err => {
