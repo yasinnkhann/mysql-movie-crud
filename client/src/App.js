@@ -49,7 +49,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="app">
       <div className="form">
         <h1>CRUD APPLICATION</h1>
         <label>Movie Name:</label>

@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "devStart": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+   "start": "node index.js",
+		"server": "nodemon index.js",
+		"client": "cd ../client && yarn run start",
+		"dev": "concurrently \"yarn run server\" \"yarn run client\""
   },
   "keywords": [],
   "author": "",
@@ -17,5 +18,8 @@
     "express": "^4.17.1",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.12"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.2"
   }
 }
